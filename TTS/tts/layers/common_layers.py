@@ -1,3 +1,4 @@
+from typing_extensions import Final
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -96,6 +97,9 @@ class Prenet(nn.Module):
             Defaults to [256, 256].
         bias (bool, optional): enable/disable bias in prenet linear layers. Defaults to True.
     """
+    prenet_type: Final[str]
+    prenet_dropout: Final[bool]
+
     # pylint: disable=dangerous-default-value
     def __init__(self,
                  in_features,
