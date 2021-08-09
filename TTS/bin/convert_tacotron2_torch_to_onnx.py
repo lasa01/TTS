@@ -58,20 +58,20 @@ with torch.no_grad():
                                        ddc_r=c.ddc_r,
                                        speaker_embedding_dim=None))
 
-    # checkpoint = torch.load(args.torch_model_path,
-    #                         map_location=torch.device('cpu'))
-    # state_dict = checkpoint['model']
+    checkpoint = torch.load(args.torch_model_path,
+                            map_location=torch.device('cpu'))
+    state_dict = checkpoint['model']
 
-    # new_state_dict = {}
-    # # remap some changed state keys
-    # for (key, value) in state_dict.items():
-    #     if key.endswith("weight_ih") or key.endswith("weight_hh") or key.endswith("bias_ih") or key.endswith("bias_hh"):
-    #         new_state_dict[key + "_l0"] = value
-    #     else:
-    #         new_state_dict[key] = value
+    new_state_dict = {}
+    # remap some changed state keys
+    for (key, value) in state_dict.items():
+        if key.endswith("weight_ih") or key.endswith("weight_hh") or key.endswith("bias_ih") or key.endswith("bias_hh"):
+            new_state_dict[key + "_l0"] = value
+        else:
+            new_state_dict[key] = value
 
-    # # model has some state preinitialized that the normal one doesn't
-    # model.load_state_dict(new_state_dict, strict=False)
+    # model has some state preinitialized that the normal one doesn't
+    model.load_state_dict(new_state_dict, strict=False)
 
     model.eval()
 
@@ -99,5 +99,4 @@ with torch.no_grad():
             'stop_tokens': {1: 'out'},
         },
         example_outputs=out,
-        verbose=True,
     )
